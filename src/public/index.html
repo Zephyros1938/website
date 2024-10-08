@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Zephyros' Website</title>
+    <style>
+        canvas {
+            background-color: aquamarine;
+            padding-left: 0;
+            padding-right: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+            margin-top: auto;
+            margin-bottom: auto;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+            outline: auto rgb(0, 0, 0) 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas width="1920" height="1080" id="draw"></canvas>
+    <script>
+        const drawElement = document.getElementById('draw');
+        const width = drawElement.getAttribute('width')
+        const height = drawElement.getAttribute('height')
+
+        const ctx = draw.getContext("2d");
+        function resizeDraw() {
+            const proportion = (window.innerWidth / width)
+            drawElement.width = (width * proportion) * 0.8
+            drawElement.height = (height * proportion) * 0.8
+            console.log(drawElement.width, drawElement.height)
+        }
+
+        window.addEventListener("resize", () => {
+            resizeDraw()
+        })
+
+        resizeDraw()
+
+        ctx.rect(10, 10, 150, 100);
+        ctx.fill()
+    </script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io();
+        socket.on('message', (message) => {
+            console.log(message)
+            socket.emit('message_recieved')
+        })
+    </script>
+</body>
+
+</html>
