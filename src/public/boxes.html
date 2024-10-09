@@ -48,6 +48,11 @@
         socket.on('message', (message) => {
             console.log(message)
         })
+
+        socket.on('inversal coords', (x) => {
+            console.log(x)
+        })
+
         ctx.fillStyle = "white";
         let size = 20;
         let coords = { x1: 0, y1: 0, x2: 0, y2: 0 };
@@ -56,32 +61,24 @@
             let rect = drawElement.getBoundingClientRect();
 
             coords = {
-                x1: ((event.clientX - rect.left) - (size * proportion)),
-                y1: ((event.clientY - rect.top) - (size * proportion)),
-                x2: ((size * 2) * proportion),
-                y2: ((size * 2) * proportion)
+                x1: ((event.clientX - rect.left) - (size)),
+                y1: ((event.clientY - rect.top) - (size)),
+                x2: ((size * 2)),
+                y2: ((size * 2))
             };
+            socket.emit("coords push", coords);
         });
 
-        function drawBoxesWithCoords(coord) {
+        function drawBoxesWithCoords(coordl) {
             ctx.clearRect(0, 0, width, height);
-            ctx.fillRect(coord.x1, coord.y1, coord.x2, coord.y2);
+            for (let [key, coord] of Object.entries(coordl)){
+                ctx.fillRect(coord.x1, coord.y1, coord.x2, coord.y2);
+            }
         };
 
-        drawElement.addEventListener("mousedown", () => {
-            size = 25;
-            ctx.fillStyle = "red";
-            drawBoxesWithCoords(coords)
-        })
-        drawElement.addEventListener("mouseup", () => {
-            size = 20;
-            ctx.fillStyle = "white";
+        socket.on("universal coords", coords => {
             drawBoxesWithCoords(coords);
         })
-
-        setInterval(() => {
-            drawBoxesWithCoords(coords);
-        }, 5)
     </script>
 </body>
 

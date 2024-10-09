@@ -16,6 +16,8 @@ app.get('*', (req, res) => {
     res.sendFile(dir)
 })
 
+const coords = {}
+
 io.on("connection", (socket) => {
     ipaddr = socket.handshake.address;
 
@@ -25,11 +27,20 @@ io.on("connection", (socket) => {
     socket.on('disconnect', () => {
         console.log('User disconnected');
     });
+
+    socket.on('coords push', (x) => {coords[[ipaddr]] = x})
 });
 
 if (serverconfig.autoIP) {
     serverconfig.address = ip.address()
 }
+
+setInterval(() => {
+    if (Object.keys(coords).length>0){
+        console.log(coords)
+        io.sockets.emit('universal coords', coords)
+    }
+}, 20);
 
 server.listen({ address: serverconfig.address, port: serverconfig.port }, () => {
     console.log(`Server is running at http://${serverconfig.address}:${serverconfig.port}`);
