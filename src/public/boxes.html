@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Zephyros' Website</title>
+    <style>
+        canvas {
+            background-color: rgb(0, 0, 0);
+            padding-left: 0;
+            padding-right: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+            margin-top: auto;
+            margin-bottom: auto;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas width="1920" height="1080" id="draw"></canvas>
+    <script>
+        const drawElement = document.getElementById('draw');
+        const width = drawElement.getAttribute('width')
+        const height = drawElement.getAttribute('height')
+
+        const ctx = drawElement.getContext("2d");
+
+        var proportion = (window.innerWidth / width) * 0.8
+
+        function resizeDraw() {
+            proportion = (window.innerWidth / width) * 0.8
+            drawElement.width = width * proportion
+            drawElement.height = height * proportion
+        }
+
+        window.addEventListener("resize", () => {
+            resizeDraw()
+        })
+
+        resizeDraw()
+    </script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io();
+        socket.on('message', (message) => {
+            console.log(message)
+        })
+        ctx.fillStyle = "white";
+        let size = 20;
+        let coords = { x1: 0, y1: 0, x2: 0, y2: 0 };
+
+        drawElement.addEventListener("mousemove", () => {
+            let rect = drawElement.getBoundingClientRect();
+
+            coords = {
+                x1: ((event.clientX - rect.left) - (size * proportion)),
+                y1: ((event.clientY - rect.top) - (size * proportion)),
+                x2: ((size * 2) * proportion),
+                y2: ((size * 2) * proportion)
+            };
+        });
+
+        function drawBoxesWithCoords(coord) {
+            ctx.clearRect(0, 0, width, height);
+            ctx.fillRect(coord.x1, coord.y1, coord.x2, coord.y2);
+        };
+
+        drawElement.addEventListener("mousedown", () => {
+            size = 25;
+            ctx.fillStyle = "red";
+            drawBoxesWithCoords(coords)
+        })
+        drawElement.addEventListener("mouseup", () => {
+            size = 20;
+            ctx.fillStyle = "white";
+            drawBoxesWithCoords(coords);
+        })
+
+        setInterval(() => {
+            drawBoxesWithCoords(coords);
+        }, 5)
+    </script>
+</body>
+
+</html>

@@ -4,18 +4,19 @@ const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
 const ip = require('ip')
+const path = require('node:path')
 
-const app = express();
+const app = express()
 const server = http.createServer(app);
-const io = socketIo(server);
+const io = new socketIo.Server(server);
 
-app.use(express.static('public'))
+app.get('*', (req, res) => {
+    dir = (__dirname+ '/public'+ req.path)
+    console.log(dir)
+    res.sendFile(dir)
+})
 
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
-});
-
-io.on('connection', (socket) => {
+io.on("connection", (socket) => {
     ipaddr = socket.handshake.address;
 
     console.log('A user connected');
@@ -24,14 +25,10 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         console.log('User disconnected');
     });
-
-    socket.on('message_recieved', () => {
-        console.log(ipaddr)
-    })
 });
 
-if(serverconfig.autoIP){
-    serverconfig.address=ip.address()
+if (serverconfig.autoIP) {
+    serverconfig.address = ip.address()
 }
 
 server.listen({ address: serverconfig.address, port: serverconfig.port }, () => {
