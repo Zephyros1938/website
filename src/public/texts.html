@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Zephyros' Website</title>
+    <style>
+        .content {
+            text-align: left;
+            padding-left: 40%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="chat content" id="chat content">
+
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io('/texts')
+
+        const users = []
+
+        const chatbox = document.getElementById("chat content")
+
+        var myName
+        var typing = false;
+
+        function add_user(name) {
+            //console.log(name)
+            users.push(name)
+            const h = document.createElement('div')
+            const d = document.createElement('p')
+            const d2 = document.createElement("textarea")
+
+            const hContentList = [d, d2]
+            h.setAttribute("id", name)
+            d.innerText = name
+            d2.style.display = "none"
+            d2.id = `${name}/chat`
+            h.style.position = "absolute" //set top and left
+            h.style.backgroundColor = "white"
+            h.style.outline = "2px black solid"
+            for (const x of hContentList) {
+                x.style.margin = "0px 0px 0px 0px"
+                x.style.padding = "5px 5px 5px 5px"
+            }
+            h.appendChild(d);
+            h.appendChild(d2);
+            document.body.appendChild(h)
+        }
+
+        socket.on("chat emit", (text) => {
+            chatbox.innerText += text
+        })
+
+        socket.on("your name", (name) => {
+            myName = name;
+            console.log(`name set to ${myName}`)
+        })
+
+        socket.on("add user", (name) => {
+            add_user(name)
+        })
+
+        socket.on("remove user", (name) => {
+            delete document.getElementById(name)
+            delete users[[name]]
+        })
+
+        socket.on("position update", (user_list) => {
+            for (let [key, value] of Object.entries(user_list)) {
+                if (!users.includes(key)) {
+                    add_user(key)
+                }
+                //console.log(key, value)
+                x = document.getElementById(key)
+                x.style.top = `${value.y}px`
+                x.style.left = `${value.x}px`
+            }
+        })
+
+        document.addEventListener("mousemove", (event) => {
+            let { clientX, clientY } = event;
+            socket.emit("position push", [clientX, clientY])
+        })
+
+        document.addEventListener("keydown", (event) => {
+            const k = event.key
+            const chatId = document.getElementById(`${myName}/chat`)
+            //console.log(typing, k)
+            if ((k === "t" || k === "T") && !typing) {
+                typing = true
+                if (typing) {
+                    chatId.value = ''
+                    chatId.style.display = "inline"
+                    chatId.focus()
+                } else {
+                    chatId.style.display = "none"
+                    chatId.blur()
+                }
+            }
+            if (k === "Enter") {
+                typing = false;
+                chatId.style.display = "none"
+                chatId.blur()
+                if (chatId.value.length > 0) {
+                    socket.emit("chat post", myName, chatId.value)
+                }
+                chatId.value = ''
+            }
+        })
+    </script>
+</body>
+
+</html>
