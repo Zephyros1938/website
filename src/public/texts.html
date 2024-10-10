@@ -2,11 +2,17 @@
 <html>
 
 <head>
-    <title>Zephyros' Website</title>
+    <title>texts.html</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="./connectUpdate.js"></script>
     <style>
         .content {
             text-align: left;
             padding-left: 40%;
+        }
+
+        body {
+            overflow: hidden;
         }
     </style>
 </head>
@@ -15,7 +21,6 @@
     <div class="chat content" id="chat content">
 
     </div>
-    <script src="/socket.io/socket.io.js"></script>
     <script>
         const socket = io('/texts')
 
@@ -28,6 +33,9 @@
 
         function add_user(name) {
             //console.log(name)
+            if(name in users){
+                return
+            }
             users.push(name)
             const h = document.createElement('div')
             const d = document.createElement('p')
@@ -51,7 +59,9 @@
         }
 
         socket.on("chat emit", (text) => {
-            chatbox.innerText += text
+            const elem = document.createElement("p")
+            elem.innerText = text
+            chatbox.appendChild(elem)
         })
 
         socket.on("your name", (name) => {
@@ -64,7 +74,7 @@
         })
 
         socket.on("remove user", (name) => {
-            delete document.getElementById(name)
+            document.getElementById(name).remove()
             delete users[[name]]
         })
 
@@ -92,9 +102,9 @@
             if ((k === "t" || k === "T") && !typing) {
                 typing = true
                 if (typing) {
-                    chatId.value = ''
                     chatId.style.display = "inline"
                     chatId.focus()
+                    chatId.value = ''
                 } else {
                     chatId.style.display = "none"
                     chatId.blur()

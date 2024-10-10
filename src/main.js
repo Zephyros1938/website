@@ -26,9 +26,15 @@ const server = http.createServer((req, res) => {
 const io = new Server(server);
 
 const positions = {}
-
+var connected = 0
 // Listen for connection events
-io.on('connection', (socket) => {
+io.on("connection", (socket) => {
+    connected++;
+    io.emit("connection count update", connected)
+    socket.on("disconnect", () => {
+        connected--;
+        io.emit("connection count update", connected)
+    })
 });
 
 const io_texts = io.of('/texts')
@@ -41,7 +47,7 @@ io_texts.on("connection", (socket) => {
     io_texts.emit("position update", positions)
 
     socket.on("chat post", (name, text) => {
-        io_texts.emit("chat emit", (`${name.padEnd(15," ")} : ${utilities.escapeHtml(text)}\n`))
+        io_texts.emit("chat emit", (`${name.padEnd(15, " ")} : ${utilities.escapeHtml(text)}\n`))
     })
 
     socket.on("disconnect", () => {
