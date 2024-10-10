@@ -6,4 +6,17 @@ function escapeHtml(unsafe) {
         .replace(/'/g, "&#039;")
 }
 
-module.exports = { escapeHtml }
+function itemCounter(value = Array.prototype, index = String.prototype) {
+    var c = 0
+    console.log(value, index)
+    value.forEach((element) => {
+        console.log(element, index)
+        if(element==index){
+            c+=1
+        }
+    });
+    //console.log(c)
+    return c
+}
+
+module.exports = { escapeHtml, itemCounter }

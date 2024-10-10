@@ -8,6 +8,7 @@ const fs = require('fs')
 const ip = require('ip')
 
 // Create an HTTP server
+var connectedUsers = []
 const server = http.createServer((req, res) => {
     const url = req.url == '/' ? "/index.html" : req.url
     var p;
@@ -18,7 +19,6 @@ const server = http.createServer((req, res) => {
         p = Buffer.alloc(1, 0)
         res.writeHead(404);
     }
-
     res.end(p);
 });
 
@@ -29,11 +29,20 @@ const positions = {}
 var connected = 0
 // Listen for connection events
 io.on("connection", (socket) => {
+    var socketCount = 0
+    connectedUsers.filter(x => { x == socket.handshake.address ? socketCount++ : socketCount })
+    if (socketCount > 0) {
+        socket.disconnect(true);
+    }
     connected++;
+    connectedUsers.push(socket.handshake.address)
     io.emit("connection count update", connected)
+    console.log(connectedUsers)
     socket.on("disconnect", () => {
         connected--;
+        connectedUsers = connectedUsers.filter(item => item !== socket.handshake.address)
         io.emit("connection count update", connected)
+        console.log(connectedUsers)
     })
 });
 
@@ -62,6 +71,7 @@ io_texts.on("connection", (socket) => {
 
 
 serverconfig.address = serverconfig.autoIP == true ? ip.address() : serverconfig.address;
+
 server.listen({ host: serverconfig.address, port: serverconfig.port }, () => {
     console.log(`Server is running on http://${serverconfig.address}:${serverconfig.port}`);
 });
