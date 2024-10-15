@@ -44,25 +44,29 @@
             if (name in users) {
                 return
             }
+
             const mouseList = mousearea.getElementsByTagName("div")
-            //console.log(mouseList)
 
             for (let i = 0; i < mouseList.length; i++) {
                 var x = mouseList[i]
                 const xParagraph = document.getElementById(`mouse/text/${x.id}`)
-                if (x.id == myName) {
-                    
-                } else {
-                    xParagraph.style.color = "red"
+                if (x.id != myName) {
+                    xParagraph.addEventListener("mouseover", (ev) => {
+                        xParagraph.style.color = "#FF0000FF"
+                    })
+                    xParagraph.addEventListener("mouseout", (ev) => {
+                        xParagraph.style.color = "#000000FF"
+                    })
                 }
             }
         }
 
         function add_user(name) {
-            //console.log(name)
+
             if (name in users) {
                 return
             }
+            
             users.push(name)
             const h = document.createElement('div')
             const d = document.createElement('p')
@@ -75,8 +79,8 @@
             d2.style.display = "none"
             d2.id = `${name}/chat`
             h.style.position = "absolute" //set top and left
-            h.style.backgroundColor = "white"
-            h.style.outline = "2px black solid"
+            h.style.backgroundColor = "#FFFFFF7F"
+            h.style.outline = "2px #0000007F solid"
             for (const x of hContentList) {
                 x.style.margin = "0px 0px 0px 0px"
                 x.style.padding = "5px 5px 5px 5px"
