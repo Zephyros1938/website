@@ -33,6 +33,7 @@ io.on("connection", (socket) => {
     connectedUsers.filter(x => { x == socket.handshake.address ? socketCount++ : socketCount })
     if (socketCount > 0) {
         socket.disconnect(true);
+        return
     }
     connected++;
     connectedUsers.push(socket.handshake.address)
@@ -56,7 +57,7 @@ io_texts.on("connection", (socket) => {
     io_texts.emit("position update", positions)
 
     socket.on("chat post", (name, text) => {
-        io_texts.emit("chat emit", (`${name.padEnd(15, " ")} : ${utilities.escapeHtml(text)}\n`))
+        io_texts.emit("chat emit", (`${name.padEnd(20, "&nbsp;")} : ${utilities.escapeHtml(text)}\n`))
     })
 
     socket.on("disconnect", () => {

@@ -11,8 +11,14 @@
             padding-left: 40%;
         }
 
+        .chat\ content {
+            overflow: hidden;
+            height: 100%;
+        }
+
         body {
             overflow: hidden;
+            height: 100%;
         }
     </style>
 </head>
@@ -60,8 +66,8 @@
 
         socket.on("chat emit", (text) => {
             const elem = document.createElement("p")
-            elem.innerText = text
-            chatbox.appendChild(elem)
+            elem.innerHTML = text
+            chatbox.prepend(elem)
         })
 
         socket.on("your name", (name) => {
