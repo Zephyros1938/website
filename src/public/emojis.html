@@ -38,23 +38,36 @@
         function iterateRecursively(obj, depth = 1) {
             for (const key in obj) {
                 if (obj.hasOwnProperty(key)) {
+                    var appendTo = document.body
+                    const dep = Math.min(depth, 6)
                     const value = obj[key];
-                    const headerTag = `h${Math.min(depth, 6)}`
+                    const headerTag = `h${dep}`
                     const x = document.createElement(headerTag)
                     x.innerHTML = key
-                    document.body.appendChild(x)
+                    const z = document.createElement("div")
+                    z.id = `${dep} ${key}`
+                    document.body.appendChild(z)
+                    z.appendChild(x)
+                    if(z.previousElementSibling){
+                        console.log(z.previousElementSibling.id[0], dep, z.previousElementSibling.id[0] < dep)
+                        if(z.previousElementSibling.id[0] < dep){
+                            z.previousElementSibling.appendChild(z)
+                        }
+                    }
                     if (typeof value === 'object' && value !== null) {
+                        const y = document.createElement("hr")
+                        x.appendChild(y)
                         iterateRecursively(value, depth + 1);
                     } else {
                         console.log(`loading : ${value}`)
                         try {
-                            const x = document.createElement("pre")
+                            const p = document.createElement("pre")
 
                             if (value.includes(".json")) {
                                 loadJsonData(value)
                                     .then(data => {
                                         for ([i, v] of Object.entries(data)) {
-                                            x.innerHTML += `${i.padEnd(50, " ")} : ${v}\n`
+                                            p.innerHTML += `${i.padEnd(50, " ")} : ${v}\n`
                                         }
                                     })
                             } else if (
@@ -66,16 +79,16 @@
                                 value.includes(".webp")
                             ) {
                                 if (value.includes("/sticker/")) {
-                                    x.innerHTML += `</pre><img src="${value}" class="sticker" draggable="false"><pre>`
+                                    p.innerHTML += `</pre><img src="${value}" class="sticker" draggable="false"><pre>`
                                 } else {
-                                    x.innerHTML += `</pre><img src="${value}" class="emoji" draggable="false"><pre>`
+                                    p.innerHTML += `</pre><img src="${value}" class="emoji" draggable="false"><pre>`
                                 }
                             }
                             else {
-                                x.innerHTML += `${key.padEnd(50, " ")} : ${value}\n`
+                                p.innerHTML += `${key.padEnd(50, " ")} : ${value}\n`
                             }
 
-                            document.body.appendChild(x)
+                            z.appendChild(p)
                         } catch (err) {
                             console.log(`load of ${value} failed with error:\n${err}`)
                         }
