@@ -1,15 +1,24 @@
 const serverconfig = require('./serverconfig.json')
 const utilities = require('./utilities')
 
-const http = require('node:https') ?? require('node:http');
+const http = serverconfig.port === 443 ? require('node:https') : require('node:http');
 const fs = require('node:fs')
 const { Server } = require('socket.io');
 const path = require('node:path')
 const ip = require('ip')
 
-const options = {
-    key: fs.readFileSync('./certificates/private_key.pem'),
-    cert: fs.readFileSync('./certificates/private_cert.pem'),
+const options = {}
+
+if (serverconfig.port === 443) {
+    try {
+        const key = fs.readFileSync('./certificates/private_key.pem')
+        const cert = fs.readFileSync('./certificates/private_cert.pem')
+        options["key"] = key
+        options["cert"] = cert
+    } catch {
+        console.log("You do not have the proper key and cert files.\nplease switch to a different port if you wish to use https, or provide the proper files.")
+        return
+    }
 }
 
 

@@ -7,13 +7,13 @@
     "custom": {
         "server": {
             "static": {
-                "verypleased": "./emojis/custom/server/static/verypleased.webp",
-                "firgolden": "./emojis/custom/server/static/firgolden.webp",
-                "autismo": "./emojis/custom/server/static/autismo.webp",
-                "erect": "./emojis/custom/server/static/erect.webp"
+                ";verypleased;": "./emojis/custom/server/static/verypleased.webp",
+                ";firgolden;": "./emojis/custom/server/static/firgolden.webp",
+                ";autismo;": "./emojis/custom/server/static/autismo.webp",
+                ";why-1;": "./emojis/custom/server/static/erect.webp"
             },
             "animated": {
-                "slugcatshaker": "./emojis/custom/server/animated/slugcatshaker.gif"
+                ";slugcatshaker;": "./emojis/custom/server/animated/slugcatshaker.gif"
             }
         }
     }
