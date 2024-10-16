@@ -14,6 +14,9 @@
             },
             "animated": {
                 ";slugcatshaker;": "./emojis/custom/server/animated/slugcatshaker.gif"
+            },
+            "sticker": {
+                ";itfbyb;": "./emojis/custom/server/sticker/if_they_talk_behind_yo_back.png"
             }
         }
     }

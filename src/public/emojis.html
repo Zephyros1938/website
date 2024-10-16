@@ -9,6 +9,16 @@
         * {
             font-family: monospace;
         }
+
+        .emoji {
+            width: 32px;
+            height: 32px;
+        }
+
+        .sticker {
+            width: 160px;
+            height: 160px;
+        }
     </style>
     <script>
         function loadJsonData(url) {
@@ -33,30 +43,37 @@
                         iterateRecursively(value, depth + 1);
                     } else {
                         console.log(`loading : ${value}`)
-                        const x = document.createElement("pre")
+                        try {
+                            const x = document.createElement("pre")
 
-                        if (value.includes(".json")) {
-                            loadJsonData(value)
-                                .then(data => {
-                                    console.log("json : ", data)
-                                    for ([i, v] of Object.entries(data)) {
-                                        x.innerHTML += `${i.padEnd(50, " ")} : ${v}\n`
-                                    }
-                                })
-                        } else if (
-                            value.includes(".png") ||
-                            value.includes(".gif") ||
-                            value.includes(".webm") ||
-                            value.includes(".jpeg") ||
-                            value.includes(".webp")
-                        ) {
-                            x.innerHTML += `</pre><img src="${value}" width="32px" height="32px"><pre>`
-                        }
-                        else {
-                            x.innerHTML += `${key.padEnd(50, " ")} : ${value}\n`
-                        }
+                            if (value.includes(".json")) {
+                                loadJsonData(value)
+                                    .then(data => {
+                                        for ([i, v] of Object.entries(data)) {
+                                            x.innerHTML += `${i.padEnd(50, " ")} : ${v}\n`
+                                        }
+                                    })
+                            } else if (
+                                value.includes(".png") ||
+                                value.includes(".gif") ||
+                                value.includes(".webm") ||
+                                value.includes(".jpeg") ||
+                                value.includes(".webp")
+                            ) {
+                                if (value.includes("/sticker/")) {
+                                    x.innerHTML += `</pre><img src="${value}" class="sticker"><pre>`
+                                } else {
+                                    x.innerHTML += `</pre><img src="${value}" class="emoji"><pre>`
+                                }
+                            }
+                            else {
+                                x.innerHTML += `${key.padEnd(50, " ")} : ${value}\n`
+                            }
 
-                        document.body.appendChild(x)
+                            document.body.appendChild(x)
+                        } catch (err) {
+                            console.log(`load of ${value} failed with error:\n${err}`)
+                        }
                     }
                 }
             }
@@ -64,7 +81,6 @@
 
         loadJsonData("./emojis/total_list.json")
             .then(jsonData => {
-                console.log(jsonData)
                 iterateRecursively(jsonData)
             })
     </script>
