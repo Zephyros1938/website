@@ -20,6 +20,10 @@
             height: 160px;
         }
     </style>
+    <link rel="apple-touch-icon" sizes="180x180" href="./static/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./static/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./static/favicon-16x16.png">
+    <link rel="manifest" href="./static/site.webmanifest">
     <script>
         function loadJsonData(url) {
             return fetch(url)
@@ -56,6 +60,7 @@
                             } else if (
                                 value.includes(".png") ||
                                 value.includes(".gif") ||
+                                value.includes(".jpg") ||
                                 value.includes(".webm") ||
                                 value.includes(".jpeg") ||
                                 value.includes(".webp")

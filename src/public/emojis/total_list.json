@@ -16,7 +16,17 @@
                 ";slugcatshaker;": "./emojis/custom/server/animated/slugcatshaker.gif"
             },
             "sticker": {
-                ";itfbyb;": "./emojis/custom/server/sticker/if_they_talk_behind_yo_back.png"
+                ";itfbyb;": "./emojis/custom/server/sticker/if_they_talk_behind_yo_back.png",
+                ";apex;": "./emojis/custom/server/sticker/apex-large.jpg",
+                ";bucolic;": "./emojis/custom/server/sticker/bucolic-large.jpg",
+                ";crepuscular;": "./emojis/custom/server/sticker/crepuscular-large.jpg",
+                ";lineament;": "./emojis/custom/server/sticker/lineament-large.jpg",
+                ";luxuriant;": "./emojis/custom/server/sticker/luxuriant-large.jpg",
+                ";nexus;": "./emojis/custom/server/sticker/nexus-large.jpg",
+                ";recluse;": "./emojis/custom/server/sticker/recluse-large.jpg",
+                ";refulgent;": "./emojis/custom/server/sticker/refulgent-large.jpg",
+                ";shard;": "./emojis/custom/server/sticker/shard-large.jpg",
+                ";striation;": "./emojis/custom/server/sticker/striation-large.jpg"
             }
         }
     }

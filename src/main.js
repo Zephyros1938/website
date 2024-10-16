@@ -16,7 +16,7 @@ if (serverconfig.port === 443) {
         options["key"] = key
         options["cert"] = cert
     } catch {
-        console.log("You do not have the proper key and cert files.\nplease switch to a different port if you wish to use https, or provide the proper files.")
+        console.log("You do not have the proper key and cert files.\nplease switch to a different port if you wish to use https, or provide the proper files.\nFIX:\n\tadd src/certificates/private_key.pem\n\tadd certificates/private_cert.pem")
         return
     }
 }
@@ -25,7 +25,7 @@ if (serverconfig.port === 443) {
 // Create an HTTP server
 var connectedUsers = []
 const server = http.createServer(options, (req, res) => {
-    const url = req.url == '/' ? "/index.html" : req.url
+    const url = req.url == '/' ? "/index.html" : req.url == 'favicon.ico' ? "/static/favicon.ico" : req.url
     var p;
     try {
         p = fs.readFileSync(path.join(__dirname, 'public', url))

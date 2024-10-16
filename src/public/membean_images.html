@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Membean Image List (R)</title>
+    <style>
+        #image-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px;
+        }
+
+        p, h1 {
+            text-align: center;
+        }
+
+        img {
+            margin: 10px;
+            max-width: 150px;
+            max-height: 150px;
+            border: 1px solid #ccc;
+        }
+    </style>
+    <link rel="apple-touch-icon" sizes="180x180" href="./static/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./static/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./static/favicon-16x16.png">
+    <link rel="manifest" href="./static/site.webmanifest">
+</head>
+
+<body>
+    <h1>Every Large Image In Membean (R)</h1>
+    <p>This page is used for refreshing the Membean image database.</p>
+    <div id="image-container"></div>
+
+    <script>
+        function sleep(time) {
+            return new Promise(resolve => setTimeout(resolve, time));
+        }
+
+        async function loadImage(image, size) {
+            return new Promise((resolve, reject) => {
+                const img = document.createElement('img');
+                img.src = `https://cdn2.membean.com/public/images/wordimages/bkgd2/${image}${size}.jpg?qdep8`;
+                img.alt = image;
+
+                img.onload = () => {
+                    console.log(`Image loaded: ${img.src}`);
+                    resolve(img);
+                };
+
+                img.onerror = () => {
+                    console.error(`Error loading image: ${img.src}`);
+                    reject();
+                };
+            });
+        }
+
+        async function loadImages() {
+            try {
+                const response = await fetch('./resources/membeanwordlist.json', {"credentials": "include"});
+                const data = await response.json();
+
+                const imageContainer = document.getElementById('image-container');
+
+                for (const image of data) {
+                    const sizes = ['-large', '-medium', '-small', '']; // dont add medium small ''
+
+                    for (const size of sizes) {
+                        try {
+                            const loadedImage = await loadImage(image, size);
+                            imageContainer.appendChild(loadedImage);
+                            break;
+                        } catch {
+                            continue;
+                        }
+                    }
+
+                    //await sleep(1);
+                }
+            } catch (error) {
+                console.error('Error loading images:', error);
+            }
+        }
+
+        loadImages();
+
+    </script>
+
+</body>
+
+</html>
