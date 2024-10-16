@@ -1,15 +1,21 @@
 const serverconfig = require('./serverconfig.json')
 const utilities = require('./utilities')
 
-const http = require('http');
+const http = require('node:https') ?? require('node:http');
+const fs = require('node:fs')
 const { Server } = require('socket.io');
-const path = require('path')
-const fs = require('fs')
+const path = require('node:path')
 const ip = require('ip')
+
+const options = {
+    key: fs.readFileSync('./certificates/private_key.pem'),
+    cert: fs.readFileSync('./certificates/private_cert.pem'),
+}
+
 
 // Create an HTTP server
 var connectedUsers = []
-const server = http.createServer((req, res) => {
+const server = http.createServer(options, (req, res) => {
     const url = req.url == '/' ? "/index.html" : req.url
     var p;
     try {
@@ -49,7 +55,7 @@ io.on("connection", (socket) => {
 
 const io_texts = io.of('/texts')
 io_texts.on("connection", (socket) => {
-    const ipaddr = socket.handshake.address
+    const ipaddr = socket.handshake.headers['x-forwarded-for'] || socket.conn.remoteAddress;
 
     socket.emit("your name", ipaddr)
 
@@ -77,5 +83,5 @@ io_texts.on("connection", (socket) => {
 serverconfig.address = serverconfig.autoIP == true ? ip.address() : serverconfig.address;
 
 server.listen({ host: serverconfig.address, port: serverconfig.port }, () => {
-    console.log(`Server is running on http://${serverconfig.address}:${serverconfig.port}`);
+    console.log(`Server is running on https://${serverconfig.address}:${serverconfig.port}`);
 });
