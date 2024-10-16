@@ -132,4 +132,5 @@ dist
 # Manually added
 
 ## Certificate files
-src/certficates/*
+src/certificates/private_cert.pem
+src/certificates/private_key.pem
