@@ -61,9 +61,9 @@
                                 value.includes(".webp")
                             ) {
                                 if (value.includes("/sticker/")) {
-                                    x.innerHTML += `</pre><img src="${value}" class="sticker"><pre>`
+                                    x.innerHTML += `</pre><img src="${value}" class="sticker" draggable="false"><pre>`
                                 } else {
-                                    x.innerHTML += `</pre><img src="${value}" class="emoji"><pre>`
+                                    x.innerHTML += `</pre><img src="${value}" class="emoji" draggable="false"><pre>`
                                 }
                             }
                             else {
