@@ -1,0 +1,17 @@
+{
+    "emoticons-builtin": {
+        "faces": "./emojis/emoticons-builtin/faces.json",
+        "objects": "./emojis/emoticons-builtin/objects.json",
+        "buildings": "./emojis/emoticons-builtin/buildings.json"
+    },
+    "custom": {
+        "server": {
+            "static": {
+                "verypleased": "./emojis/custom/server/static/verypleased.png"
+            },
+            "animated": {
+                "slugcatshaker": "./emojis/custom/server/animated/slugcatshaker.gif"
+            }
+        }
+    }
+}

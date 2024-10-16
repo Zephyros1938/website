@@ -57,7 +57,10 @@ io_texts.on("connection", (socket) => {
     io_texts.emit("position update", positions)
 
     socket.on("chat post", (name, text) => {
-        io_texts.emit("chat emit", (`<pre>${name.padEnd(15, " ")} : ${utilities.escapeHtml(text)}</pre>`))
+        if (text.split("\n").length > 1) {
+            text = utilities.escapeHtml(text).split("\n")[0] + " - CUTOFF"
+        }
+        io_texts.emit("chat emit", (`<pre>${name.padEnd(15, " ")} : ${text}</pre>`))
     })
 
     socket.on("disconnect", () => {

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Data in HTML</title>
+    <script>
+        function loadJsonData(url) {
+            return fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Failed to load ${url}`);
+                    }
+                    return response.json();
+                });
+        }
+
+        function iterateRecursively(obj, depth = 1) {
+            for (const key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    const value = obj[key];
+                    const headerTag = `h${Math.min(depth, 6)}`
+                    const x = document.createElement(headerTag)
+                    x.innerHTML = key
+                    document.body.appendChild(x)
+                    if (typeof value === 'object' && value !== null) {
+                        iterateRecursively(value, depth + 1);
+                    } else {
+                        console.log(`loading : ${value}`)
+                        const x = document.createElement("pre")
+
+                        if (value.includes(".json")) {
+                            loadJsonData(value)
+                                .then(data => {
+                                    console.log("json : ", data)
+                                    for ([i, v] of Object.entries(data)) {
+                                        x.innerHTML += `${i.padEnd(50, " ")} : ${v}\n`
+                                    }
+                                })
+                        } else if (
+                            value.includes(".png") ||
+                            value.includes(".gif") ||
+                            value.includes(".webm") ||
+                            value.includes(".jpeg")
+                        ) {
+                            x.innerHTML += `</pre><img src="${value}"><pre>`
+                        }
+                        else {
+                            x.innerHTML += `${key.padEnd(50, " ")} : ${value}\n`
+                        }
+
+                        document.body.appendChild(x)
+                    }
+                }
+            }
+        }
+
+        loadJsonData("./emojis/total_list.json")
+            .then(jsonData => {
+                console.log(jsonData)
+                iterateRecursively(jsonData)
+            })
+    </script>
+</head>
+
+<body>
+</body>
+
+</html>
