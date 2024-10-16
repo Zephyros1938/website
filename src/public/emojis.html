@@ -42,9 +42,10 @@
                             value.includes(".png") ||
                             value.includes(".gif") ||
                             value.includes(".webm") ||
-                            value.includes(".jpeg")
+                            value.includes(".jpeg") ||
+                            value.includes(".webp")
                         ) {
-                            x.innerHTML += `</pre><img src="${value}"><pre>`
+                            x.innerHTML += `</pre><img src="${value}" width="32px" height="32px"><pre>`
                         }
                         else {
                             x.innerHTML += `${key.padEnd(50, " ")} : ${value}\n`

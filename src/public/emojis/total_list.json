@@ -7,7 +7,8 @@
     "custom": {
         "server": {
             "static": {
-                "verypleased": "./emojis/custom/server/static/verypleased.png"
+                "verypleased": "./emojis/custom/server/static/verypleased.png",
+                "firgolden": "./emojis/custom/server/static/firgolden.webp"
             },
             "animated": {
                 "slugcatshaker": "./emojis/custom/server/animated/slugcatshaker.gif"
