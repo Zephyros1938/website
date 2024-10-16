@@ -19,6 +19,14 @@
             width: 160px;
             height: 160px;
         }
+
+        .active {
+            display: block;
+        }
+
+        .inactive {
+            display: none;
+        }
     </style>
     <link rel="apple-touch-icon" sizes="180x180" href="./static/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="./static/favicon-32x32.png">
@@ -37,31 +45,45 @@
 
         function iterateRecursively(obj, depth = 1) {
             for (const key in obj) {
+                const z = document.createElement("div")
                 if (obj.hasOwnProperty(key)) {
-                    var appendTo = document.body
                     const dep = Math.min(depth, 6)
                     const value = obj[key];
                     const headerTag = `h${dep}`
                     const x = document.createElement(headerTag)
                     x.innerHTML = key
-                    const z = document.createElement("div")
+                    z.className = "listDiv active"
                     z.id = `${dep} ${key}`
                     document.body.appendChild(z)
                     z.appendChild(x)
-                    if(z.previousElementSibling){
+                    x.onmousedown = function (e) {
+                        const self = x.parentNode.childNodes
+                        let vals = []
+                        for(t = 1; t <self.length; t++){
+                            if(self[t].className.includes(" active") || self[t].className=="active"){
+                                self[t].classList.replace("active","inactive")
+                            } else {
+                                self[t].classList.replace("inactive","active")
+                            }
+                        }
+                        console.log(self)
+                    }
+                    if (z.previousElementSibling) {
                         console.log(z.previousElementSibling.id[0], dep, z.previousElementSibling.id[0] < dep)
-                        if(z.previousElementSibling.id[0] < dep){
+                        if (z.previousElementSibling.id[0] < z.id[0]) {
                             z.previousElementSibling.appendChild(z)
                         }
                     }
                     if (typeof value === 'object' && value !== null) {
                         const y = document.createElement("hr")
+                        y.className = "active"
                         x.appendChild(y)
                         iterateRecursively(value, depth + 1);
                     } else {
                         console.log(`loading : ${value}`)
                         try {
                             const p = document.createElement("pre")
+                            p.className = "active"
 
                             if (value.includes(".json")) {
                                 loadJsonData(value)
@@ -79,9 +101,9 @@
                                 value.includes(".webp")
                             ) {
                                 if (value.includes("/sticker/")) {
-                                    p.innerHTML += `</pre><img src="${value}" class="sticker" draggable="false"><pre>`
+                                    p.innerHTML += `<img src="${value}" class="sticker" draggable="false">`
                                 } else {
-                                    p.innerHTML += `</pre><img src="${value}" class="emoji" draggable="false"><pre>`
+                                    p.innerHTML += `<img src="${value}" class="emoji" draggable="false">`
                                 }
                             }
                             else {
