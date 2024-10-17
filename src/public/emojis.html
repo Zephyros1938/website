@@ -102,10 +102,16 @@
         function createHeader(divElement, depth) {
             const headerTag = `h${depth}`;
             const headerElement = document.createElement(headerTag);
-            headerElement.onmousedown = function (e) {
+
+            const buttonElement = document.createElement("button")
+            const underlineElement = document.createElement("u");
+
+            underlineElement.innerHTML = divElement.getAttribute("name");
+            buttonElement.style.fontSize = "inherit"
+
+            buttonElement.onclick = function () {
                 const siblings = headerElement.parentNode.childNodes;
                 siblings.forEach(node => {
-                    console.log(node);
                     if (node.nodeType === 1 && node !== headerElement && node.nodeName !== "HR") {
                         node.classList.toggle("active");
                         node.classList.toggle("inactive");
@@ -114,11 +120,10 @@
             };
             headerElement.style.paddingLeft = `${(depth - 1) * 1}em`;
 
-            const underlineElement = document.createElement("u");
-            underlineElement.innerHTML = divElement.getAttribute("name");
-            headerElement.appendChild(underlineElement);
-
             divElement.appendChild(headerElement);
+
+            buttonElement.appendChild(underlineElement);
+            headerElement.appendChild(buttonElement)
         }
 
         /**
