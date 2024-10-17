@@ -72,16 +72,16 @@
                 v.includes(".webm") ||
                 v.includes(".jpeg") ||
                 v.includes(".webp")
-            )
-        }
+            );
+        };
 
         function addImage(v, k = "", p) {
             if (v.includes("/sticker/")) {
-                p.innerHTML += `${k}<br><img src="${v}" class="sticker" draggable="false">`
+                p.innerHTML += `${k}<br><img src="${v}" class="sticker" draggable="false">`;
             } else {
-                p.innerHTML += `${k}<br><img src="${v}" class="emoji" draggable="false">`
-            }
-        }
+                p.innerHTML += `${k}<br><img src="${v}" class="emoji" draggable="false">`;
+            };
+        };
 
         function loadJsonData(url) {
             return fetch(url)
@@ -91,75 +91,107 @@
                     }
                     return response.json();
                 });
-        }
+        };
 
         function createHeader(divElement = HTMLElement.prototype, depth = Number.prototype) {
-            const headerTag = `h${depth}`
-            const headerElement = document.createElement(headerTag)
+            const headerTag = `h${depth}`;
+            const headerElement = document.createElement(headerTag);
             headerElement.onmousedown = function (e) {
                 const siblings = headerElement.parentNode.childNodes;
                 siblings.forEach(node => {
-                    console.log(node)
+                    console.log(node);
                     if (node.nodeType === 1 && node !== headerElement && node.nodeName !== "HR") {
                         node.classList.toggle("active");
                         node.classList.toggle("inactive");
                     }
                 });
-            }
-            headerElement.style.paddingLeft = `${(depth - 1) * 1}em`
+            };
+            headerElement.style.paddingLeft = `${(depth - 1) * 1}em`;
 
-            const underlineElement = document.createElement("u")
-            underlineElement.innerHTML = divElement.getAttribute("name")
-            headerElement.appendChild(underlineElement)
+            const underlineElement = document.createElement("u");
+            underlineElement.innerHTML = divElement.getAttribute("name");
+            headerElement.appendChild(underlineElement);
 
-            divElement.appendChild(headerElement)
+            divElement.appendChild(headerElement);
         }
 
         function setParent(element = HTMLElement.prototype, newParent = HTMLElement.prototype) {
             newParent.appendChild(element);
         }
 
+        
+        function goBackUntilTarget(element, targetType) {
+            let currentElement = element;
+
+            // Loop until there are no more previous siblings
+            while (currentElement.previousElementSibling) {
+                currentElement = currentElement.previousElementSibling;
+
+                // Check if the current element matches the target type
+                if (currentElement.nodeName.toLowerCase() === targetType.toLowerCase()) {
+                    return currentElement;
+                }
+            }
+
+            return null;
+        }
+
+        /* 
+        Example usage:
+            Start from a specific element and look for the previous <div>
+
+            const startingElement = document.querySelector('.some-element');
+            const targetElement = goBackUntilTarget(startingElement, 'div');
+
+            if (targetElement) {
+                console.log('Target element found:', targetElement);
+            } else {
+                console.log('No target element found.');
+            }
+        */
+
+
         function iterateRecursively(obj, depth = 1) {
             for (const key in obj) {
-                const divElement = document.createElement("div")
+                const divElement = document.createElement("div");
                 if (obj.hasOwnProperty(key)) {
                     const value = obj[key];
-                    const dep = Math.min(depth, 6)
-                    divElement.className = "listDiv active"
-                    divElement.setAttribute("depth", dep)
-                    divElement.setAttribute("name", key)
-                    document.body.appendChild(divElement)
-                    createHeader(divElement, depth)
+                    const dep = Math.min(depth, 6);
+                    divElement.className = "listDiv active";
+                    divElement.setAttribute("depth", dep);
+                    divElement.setAttribute("name", key);
+                    document.body.appendChild(divElement);
+                    createHeader(divElement, depth);
                     if (typeof value === 'object' && value !== null) {
-                        const y = document.createElement("hr")
-                        y.className = "active"
-                        divElement.appendChild(y)
+                        const y = document.createElement("hr");
+                        y.className = "active";
+                        divElement.appendChild(y);
                         iterateRecursively(value, depth + 1);
                     } else {
-                        console.log(`loading : ${value}`)
+                        console.log(`loading : ${value}`);
                         try {
-                            const p = document.createElement("pre")
-                            p.className = "active"
+                            const p = document.createElement("pre");
+                            p.className = "active";
 
                             if (value.includes(".json")) {
                                 loadJsonData(value)
                                     .then(data => {
                                         for ([i, v] of Object.entries(data)) {
                                             if (imageCheck(v)) {
-                                                addImage(v, i, p)
-                                                p.innerHTML += "<br>"
+                                                addImage(v, i, p);
+                                                p.innerHTML += "<br>";
                                             }
                                             else { p.innerHTML += `${i.padEnd(50, " ")} : ${v}\n` }
-                                        }
-                                    })
+                                        };
+                                    });
                             } else {
-                                p.innerHTML += `${key.padEnd(50, " ")} : ${value}\n`
+                                p.innerHTML += `${key.padEnd(50, " ")} : ${value}\n`;
                             }
-                            p.style.paddingLeft = `${dep}em`
+                            p.style.paddingLeft = `${dep}em`;
 
-                            divElement.appendChild(p)
+                            divElement.appendChild(p);
                         } catch (err) {
-                            console.log(`load of ${value} failed with error:\n${err}`)
+                            console.log(`load of ${value} failed with error:\n${err}`);
                         }
                     }
                 }
@@ -169,24 +201,24 @@
         loadJsonData("./emojis/total_list.json")
             .then(jsonData => {
                 try {
-                    console.log("\nstarting loading job\n ")
-                    iterateRecursively(jsonData)
+                    console.log("\nstarting loading job\n ");
+                    iterateRecursively(jsonData);
                 } catch (error) {
-                    console.log(`iteration of jsonData failed with error:\n${error}`)
+                    console.log(`iteration of jsonData failed with error:\n${error}`);
                 }
             }).then(() => {
-                console.log("\nfinished loading\nproceeding to ordering.\n ")
+                console.log("\nfinished loading\nproceeding to ordering.\n ");
             }).then(() => {
-                const divList = document.getElementsByClassName("listDiv")
-                var prevDir
+                const divList = document.getElementsByClassName("listDiv");
+                var prevDir;
                 for (x = 0; x < divList.length; x += 1) {
                     //TODO: Add Div Tree Generation
-                    const divElement = divList[x]
-                    const depth = divElement.getAttribute("depth")
-                    const name = divElement.getAttribute("name")
-                    console.log(depth, name)
-                }
-            })
+                    const divElement = divList[x];
+                    const depth = divElement.getAttribute("depth");
+                    const name = divElement.getAttribute("name");
+                    console.log(depth, name);
+                };
+            });
     </script>
 </head>
 
