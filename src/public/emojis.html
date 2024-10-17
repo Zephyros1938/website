@@ -10,12 +10,12 @@
             font-family: monospace;
         }
 
-        .emoji {
+        img.emoji {
             width: 32px;
             height: 32px;
         }
 
-        .sticker {
+        img.sticker {
             width: 160px;
             height: 160px;
         }
@@ -28,11 +28,60 @@
             display: none;
         }
     </style>
+    <style>
+        p, pre{
+            font-size: 1em;
+        }
+
+        h1 {
+            font-size: 2em;
+        }
+
+        h2 {
+            font-size: 1.5em;
+        }
+
+        h3 {
+            font-size: 1.17em;
+        }
+
+        h4 {
+            font-size: 1em;
+        }
+
+        h5 {
+            font-size: 0.83em;
+        }
+
+        h6 {
+            font-size: .67em;
+        }
+    </style>
     <link rel="apple-touch-icon" sizes="180x180" href="./static/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="./static/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="./static/favicon-16x16.png">
     <link rel="manifest" href="./static/site.webmanifest">
     <script>
+
+        function imageCheck(v) {
+            return (
+                v.includes(".png") ||
+                v.includes(".gif") ||
+                v.includes(".jpg") ||
+                v.includes(".webm") ||
+                v.includes(".jpeg") ||
+                v.includes(".webp")
+            )
+        }
+
+        function addImage(v, k = "", p) {
+            if (v.includes("/sticker/")) {
+                p.innerHTML += `${k}<br><img src="${v}" class="sticker" draggable="false">`
+            } else {
+                p.innerHTML += `${k}<br><img src="${v}" class="emoji" draggable="false">`
+            }
+        }
+
         function loadJsonData(url) {
             return fetch(url)
                 .then(response => {
@@ -53,31 +102,25 @@
                     const x = document.createElement(headerTag)
                     x.innerHTML = key
                     z.className = "listDiv active"
-                    z.id = `${dep} ${key}`
+                    z.setAttribute("depth", dep)
+                    z.setAttribute("name", key)
                     document.body.appendChild(z)
                     z.appendChild(x)
                     x.onmousedown = function (e) {
                         const self = x.parentNode.childNodes
                         let vals = []
-                        for(t = 1; t <self.length; t++){
-                            if(self[t].className.includes(" active") || self[t].className=="active"){
-                                self[t].classList.replace("active","inactive")
+                        for (t = 1; t < self.length; t++) {
+                            if (self[t].className.includes(" active") || self[t].className == "active") {
+                                self[t].classList.replace("active", "inactive")
                             } else {
-                                self[t].classList.replace("inactive","active")
+                                self[t].classList.replace("inactive", "active")
                             }
-                        }
-                        console.log(self)
-                    }
-                    if (z.previousElementSibling) {
-                        console.log(z.previousElementSibling.id[0], dep, z.previousElementSibling.id[0] < dep)
-                        if (z.previousElementSibling.id[0] < z.id[0]) {
-                            z.previousElementSibling.appendChild(z)
                         }
                     }
                     if (typeof value === 'object' && value !== null) {
                         const y = document.createElement("hr")
                         y.className = "active"
-                        x.appendChild(y)
+                        z.appendChild(y)
                         iterateRecursively(value, depth + 1);
                     } else {
                         console.log(`loading : ${value}`)
@@ -89,24 +132,14 @@
                                 loadJsonData(value)
                                     .then(data => {
                                         for ([i, v] of Object.entries(data)) {
-                                            p.innerHTML += `${i.padEnd(50, " ")} : ${v}\n`
+                                            if (imageCheck(v)) {
+                                                addImage(v, i, p)
+                                                p.innerHTML += "<br>"
+                                            }
+                                            else { p.innerHTML += `${i.padEnd(50, " ")} : ${v}\n` }
                                         }
                                     })
-                            } else if (
-                                value.includes(".png") ||
-                                value.includes(".gif") ||
-                                value.includes(".jpg") ||
-                                value.includes(".webm") ||
-                                value.includes(".jpeg") ||
-                                value.includes(".webp")
-                            ) {
-                                if (value.includes("/sticker/")) {
-                                    p.innerHTML += `<img src="${value}" class="sticker" draggable="false">`
-                                } else {
-                                    p.innerHTML += `<img src="${value}" class="emoji" draggable="false">`
-                                }
-                            }
-                            else {
+                            } else {
                                 p.innerHTML += `${key.padEnd(50, " ")} : ${value}\n`
                             }
 
@@ -121,7 +154,20 @@
 
         loadJsonData("./emojis/total_list.json")
             .then(jsonData => {
-                iterateRecursively(jsonData)
+                try {
+                    iterateRecursively(jsonData)
+                } catch (error) {
+                    console.log(`iteration of jsonData failed with error:\n${err}`)
+                }
+            }).then(() => {
+                console.log("\nfinished loading\n\nproceeding to ordering.\n ")
+            }).then(() => {
+                const divList = document.getElementsByClassName("listDiv")
+                console.log(divList)
+                for (x = 0; x < divList.length; x += 1) {
+                    const depth = divList[x].getAttribute("depth")
+                    console.log(depth)
+                }
             })
     </script>
 </head>

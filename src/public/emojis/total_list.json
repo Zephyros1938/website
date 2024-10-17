@@ -6,41 +6,11 @@
     },
     "custom": {
         "server": {
-            "static": {
-                ";verypleased;": "./emojis/custom/server/static/verypleased.webp",
-                ";firgolden;": "./emojis/custom/server/static/firgolden.webp",
-                ";autismo;": "./emojis/custom/server/static/autismo.webp",
-                ";why-1;": "./emojis/custom/server/static/erect.webp"
-            },
-            "animated": {
-                ";slugcatshaker;": "./emojis/custom/server/animated/slugcatshaker.gif"
-            },
+            "static": "./emojis/custom/server/static/static.json",
+            "animated": "./emojis/custom/server/animated/animated.json",
             "sticker": {
-                "membean": {
-                    ";m-apex;": "./emojis/custom/server/sticker/apex-large.jpg",
-                    ";m-archipelago;": "./emojis/custom/server/sticker/archipelago-large.jpg",
-                    ";m-bucolic;": "./emojis/custom/server/sticker/bucolic-large.jpg",
-                    ";m-crepuscular;": "./emojis/custom/server/sticker/crepuscular-large.jpg",
-                    ";m-dearth;": "./emojis/custom/server/sticker/dearth-large.jpg",
-                    ";m-ethereal;": "./emojis/custom/server/sticker/ethereal-large.jpg",
-                    ";m-halcyon;": "./emojis/custom/server/sticker/halcyon-large.jpg",
-                    ";m-iridescent;": "./emojis/custom/server/sticker/iridescent-large.jpg",
-                    ";m-jettison;": "./emojis/custom/server/sticker/jettison-large.jpg",
-                    ";m-lineament;": "./emojis/custom/server/sticker/lineament-large.jpg",
-                    ";m-luxuriant;": "./emojis/custom/server/sticker/luxuriant-large.jpg",
-                    ";m-maelstrom;": "./emojis/custom/server/sticker/maelstrom-large.jpg",
-                    ";m-nexus;": "./emojis/custom/server/sticker/nexus-large.jpg",
-                    ";m-recluse;": "./emojis/custom/server/sticker/recluse-large.jpg",
-                    ";m-refulgent;": "./emojis/custom/server/sticker/refulgent-large.jpg",
-                    ";m-shard;": "./emojis/custom/server/sticker/shard-large.jpg",
-                    ";m-sinuous;": "./emojis/custom/server/sticker/sinuous-large.jpg",
-                    ";m-striation;": "./emojis/custom/server/sticker/striation-large.jpg",
-                    ";m-verdant;": "./emojis/custom/server/sticker/verdant-large.jpg",
-                    ";m-zenith;": "./emojis/custom/server/sticker/zenith-large.jpg"
-                },
-                "server": {
-                    ";zs-itfbyb;": "./emojis/custom/server/sticker/if_they_talk_behind_yo_back.png"
-                }
+                "membean": "./emojis/custom/server/sticker/membean.json",
+                "furry": "./emojis/custom/server/sticker/furry.json"
             }
         }
     }
