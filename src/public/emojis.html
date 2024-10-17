@@ -72,6 +72,11 @@
             );
         };
 
+        /**
+         * @param {String} v The Image Source
+         * @param {String} k The Image Caption
+         * @param {HTMLPreElement} p The PRE Element
+         */
         function addImage(v, k = "", p) {
             if (v.includes("/sticker/")) {
                 p.innerHTML += `${k}<br><img src="${v}" class="sticker" draggable="false">`;
@@ -90,7 +95,11 @@
                 });
         };
 
-        function createHeader(divElement = HTMLElement.prototype, depth = Number.prototype) {
+        /**
+         * @param {HTMLElement} divElement The DIV Element
+         * @param {Number} depth The DIV Element's Depth
+         */
+        function createHeader(divElement, depth) {
             const headerTag = `h${depth}`;
             const headerElement = document.createElement(headerTag);
             headerElement.onmousedown = function (e) {
@@ -112,20 +121,34 @@
             divElement.appendChild(headerElement);
         }
 
-        function setParent(element = HTMLElement.prototype, newParent = HTMLElement.prototype) {
+        /**
+         * @param {HTMLElement} element The Element
+         * @param {HTMLElement} newParent New Parent
+         */
+        function setParent(element, newParent) {
             newParent.appendChild(element);
         }
 
-        
-        function goBackUntilTarget(element, targetType) {
+        /**
+         * @param {HTMLElement} element The Element
+         * @param {Number} targetType Target Depth
+         * @param {Boolean} debug Debug Logging
+         */
+        function goBackUntilTarget(element, targetType, debug) {
             let currentElement = element;
 
             // Loop until there are no more previous siblings
             while (currentElement.previousElementSibling) {
+                if (debug) {
+                    console.log(`DEBUG: goBackUntilTarget\n\tCurrent Elem: ${currentElement.getAttribute("name") ?? currentElement.nodeName}`)
+                }
                 currentElement = currentElement.previousElementSibling;
 
                 // Check if the current element matches the target type
-                if (currentElement.nodeName.toLowerCase() === targetType.toLowerCase()) {
+                if (currentElement.getAttribute("depth") == targetType.toString(10)) {
+                    if (debug) {
+                        console.log(`DEBUG: goBackUntilTarget\n\tTarget Found: ${currentElement.getAttribute("name") ?? currentElement.nodeName}`)
+                    }
                     return currentElement;
                 }
             }
@@ -133,21 +156,10 @@
             return null;
         }
 
-        /* 
-        Example usage:
-            Start from a specific element and look for the previous <div>
-
-            const startingElement = document.querySelector('.some-element');
-            const targetElement = goBackUntilTarget(startingElement, 'div');
-
-            if (targetElement) {
-                console.log('Target element found:', targetElement);
-            } else {
-                console.log('No target element found.');
-            }
-        */
-
-
+        /**
+         * @param {Object} obj The Object To Iterate Through
+         * @param {Number} depth The Depth Of obj
+         */
         function iterateRecursively(obj, depth = 1) {
             for (const key in obj) {
                 const divElement = document.createElement("div");
@@ -194,7 +206,6 @@
                 }
             }
         }
-
         loadJsonData("./emojis/total_list.json")
             .then(jsonData => {
                 try {
@@ -207,21 +218,25 @@
                 console.log("\nfinished loading\nproceeding to ordering.\n ");
             }).then(() => {
                 const _divList = document.getElementsByClassName("listDiv");
-                const divList = []
+                var divList = []
 
-                for(x = 0; x < _divList.length; x++){
-                    divList.push(_divList[divList.length-x])
+                for (x = 0; x < _divList.length; x += 1) {
+                    divList.push(_divList[_divList.length - x - 1])
                 }
 
-                var prevDir;
                 for (x = 0; x < divList.length; x += 1) {
-                    //TODO: Add Div Tree Generation
                     const divElement = divList[x];
+                    console.log(`ordering div ${divElement.getAttribute("name")}`)
                     const depth = divElement.getAttribute("depth");
-                    const name = divElement.getAttribute("name");
-                    console.log(depth, name);
+                    const dep = Math.min(depth - 1, 6);
+                    const prevElem = goBackUntilTarget(divElement, dep, false)
+                    if (prevElem !== null) {
+                        prevElem.appendChild(divElement)
+                    }
                 };
-            });
+            }).then(() => {
+                console.log("\nfinished ordering\n ")
+            })
     </script>
 </head>
 

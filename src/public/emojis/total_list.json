@@ -1,17 +1,17 @@
 {
     "emoticons-builtin": {
-        "faces": "./emojis/emoticons-builtin/faces.json",
+        "buildings": "./emojis/emoticons-builtin/buildings.json",
         "objects": "./emojis/emoticons-builtin/objects.json",
-        "buildings": "./emojis/emoticons-builtin/buildings.json"
+        "faces": "./emojis/emoticons-builtin/faces.json"
     },
     "custom": {
         "server": {
-            "static": "./emojis/custom/server/static/static.json",
-            "animated": "./emojis/custom/server/animated/animated.json",
             "sticker": {
-                "membean": "./emojis/custom/server/sticker/membean.json",
-                "furry": "./emojis/custom/server/sticker/furry.json"
-            }
+                "furry": "./emojis/custom/server/sticker/furry.json",
+                "membean": "./emojis/custom/server/sticker/membean.json"
+            },
+            "animated": "./emojis/custom/server/animated/animated.json",
+            "static": "./emojis/custom/server/static/static.json"
         }
     }
 }
