@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>emojis.html</title>
     <style>
         img.emoji {
             width: 32px;
@@ -14,6 +13,14 @@
         img.sticker {
             width: 160px;
             height: 160px;
+        }
+
+        button.header {
+            border-radius: 0px;
+            background-color: #fff;
+        }
+        button.header:hover {
+            background-color: #ddd;
         }
 
         .active {
@@ -111,6 +118,7 @@
 
             underlineElement.innerHTML = divElement.getAttribute("name");
             buttonElement.style.fontSize = "inherit"
+            buttonElement.classList.add("header")
 
             buttonElement.onclick = function () {
                 const siblings = headerElement.parentNode.childNodes;
