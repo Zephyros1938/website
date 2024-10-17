@@ -226,7 +226,7 @@
 
                 for (x = 0; x < divList.length; x += 1) {
                     const divElement = divList[x];
-                    console.log(`ordering div ${divElement.getAttribute("name")}`)
+                    console.log(`ordering : ${divElement.getAttribute("name")}`)
                     const depth = divElement.getAttribute("depth");
                     const dep = Math.min(depth - 1, 6);
                     const prevElem = goBackUntilTarget(divElement, dep, false)
