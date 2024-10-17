@@ -206,7 +206,13 @@
             }).then(() => {
                 console.log("\nfinished loading\nproceeding to ordering.\n ");
             }).then(() => {
-                const divList = document.getElementsByClassName("listDiv");
+                const _divList = document.getElementsByClassName("listDiv");
+                const divList = []
+
+                for(x = 0; x < _divList.length; x++){
+                    divList.push(_divList[divList.length-x])
+                }
+
                 var prevDir;
                 for (x = 0; x < divList.length; x += 1) {
                     //TODO: Add Div Tree Generation

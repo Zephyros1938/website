@@ -28,16 +28,21 @@ const server = http.createServer(options, (req, res) => {
     const url = req.url == '/' ? "/index.html" : req.url == 'favicon.ico' ? "/static/favicon.ico" : req.url
     var p;
     try {
-        p = fs.readFile(path.join(__dirname, 'public', url), 'utf8', (error, data) => {
+        p = fs.readFile(path.join(__dirname, 'public', url), (error, data) => {
             if (error) {
                 res.writeHead(500, { 'Content-Type': 'text/html' })
-                res.end("Error loading page")
+                res.end(`Error loading page:\n${error}`)
                 return
             }
 
-            const modifiedMetaTags = data.replace("<!-- META_TAGS -->", utilities.generateMetaTags(url))
-            res.writeHead(200);
-            res.end(modifiedMetaTags)
+            if (url.includes('.html')) {
+                data = data.toString('utf8').replace("<!-- META_TAGS -->", utilities.generateMetaTags(url))
+                res.writeHead(200);
+                res.end(data)
+            } else {
+                res.writeHead(200);
+                res.end(data)
+            }
         })
     } catch {
         res.writeHead(404);
