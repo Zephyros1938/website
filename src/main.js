@@ -28,13 +28,21 @@ const server = http.createServer(options, (req, res) => {
     const url = req.url == '/' ? "/index.html" : req.url == 'favicon.ico' ? "/static/favicon.ico" : req.url
     var p;
     try {
-        p = fs.readFileSync(path.join(__dirname, 'public', url))
-        res.writeHead(200);
+        p = fs.readFile(path.join(__dirname, 'public', url), 'utf8', (error, data) => {
+            if (error) {
+                res.writeHead(500, { 'Content-Type': 'text/html' })
+                res.end("Error loading page")
+                return
+            }
+
+            const modifiedMetaTags = data.replace("<!-- META_TAGS -->", utilities.generateMetaTags(url))
+            res.writeHead(200);
+            res.end(modifiedMetaTags)
+        })
     } catch {
-        p = Buffer.alloc(1, 0)
         res.writeHead(404);
+        res.end();
     }
-    res.end(p);
 });
 
 // Create a Socket.IO server
