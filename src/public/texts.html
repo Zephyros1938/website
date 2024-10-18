@@ -129,7 +129,7 @@
             if (!users.includes(identifier)) {
                 add_user(identifier)
             }
-            //console.log(key, value)
+            //console.log(`${identifier} moved to ${ix},${iy}`)
             x = document.getElementById(identifier)
             x.style.top = `${iy}px`
             x.style.left = `${ix}px`
@@ -140,7 +140,7 @@
             socket.emit("position push", clientX, clientY)
         })
 
-        document.addEventListener("keydown", (event) => {
+        document.addEventListener("keydown", (event) => { //TODO: Make chat toggleable and sendable via the enter key, or remove the "t" when the "t" key is pressed
             const k = event.key
             const chatId = document.getElementById(`${myName}/chat`)
             //console.log(typing, k)
