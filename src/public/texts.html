@@ -66,7 +66,7 @@
             if (name in users) {
                 return
             }
-            
+
             users.push(name)
             const h = document.createElement('div')
             const d = document.createElement('p')
@@ -113,7 +113,7 @@
             delete users[[name]]
         })
 
-        socket.on("position update", (user_list) => {
+        socket.on("position update initial", (user_list) => {
             for (let [key, value] of Object.entries(user_list)) {
                 if (!users.includes(key)) {
                     add_user(key)
@@ -125,9 +125,19 @@
             }
         })
 
+        socket.on("position update", (identifier, ix, iy) => {
+            if (!users.includes(identifier)) {
+                add_user(identifier)
+            }
+            //console.log(key, value)
+            x = document.getElementById(identifier)
+            x.style.top = `${iy}px`
+            x.style.left = `${ix}px`
+        })
+
         document.addEventListener("mousemove", (event) => {
             let { clientX, clientY } = event;
-            socket.emit("position push", [clientX, clientY])
+            socket.emit("position push", clientX, clientY)
         })
 
         document.addEventListener("keydown", (event) => {

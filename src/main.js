@@ -37,7 +37,7 @@ const server = http.createServer(options, (req, res) => {
 
             if (url.includes('.html')) {
                 data = data.toString('utf8').replace("<!-- META_TAGS -->", utilities.generateMetaTags(url))
-                if(url.includes("/index.html")){
+                if (url.includes("/index.html")) {
                     const replacer = utilities.generateUrlLinks()
                     data = data.replace("<!-- INDEX_LINKS -->", replacer)
                 }
@@ -86,7 +86,7 @@ io_texts.on("connection", (socket) => {
     socket.emit("your name", ipaddr)
 
     io_texts.emit('add user', ipaddr)
-    io_texts.emit("position update", positions)
+    io_texts.emit("position update initial", positions)
 
     socket.on("chat post", (name, text) => {
         if (text.split("\n").length > 1) {
@@ -99,9 +99,9 @@ io_texts.on("connection", (socket) => {
         io_texts.emit("remove user", ipaddr)
         delete positions[[ipaddr]]
     })
-    socket.on('position push', (data) => {
-        positions[[ipaddr]] = { x: data[0], y: data[1] }
-        io_texts.emit("position update", positions)
+    socket.on('position push', (x,y) => {
+        positions[[ipaddr]] = { x: x, y: y }
+        io_texts.emit("position update", ipaddr, x, y)
     })
 })
 
