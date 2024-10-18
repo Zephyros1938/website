@@ -7,20 +7,56 @@
         }
 
         div.CONTENT_DIV {
+            outline: 0.25em black solid;
+            overflow-wrap: normal;
+            white-space: normal;
             margin: auto;
+            padding-top: 0.5em;
+            padding-bottom: 0.5em;
+        }
+
+        div.INFO_DIV {
+            margin: auto;
+            padding: 1em;
             width: 25em;
             outline: 0.25em black solid;
             overflow-wrap: normal;
             white-space: normal;
         }
 
-        div.INFO_DIV {
+        h1.TITLE_HEADER {
             margin: auto;
-            width: 25em;
-            padding: 1em;
-            outline: 0.25em black solid;
-            overflow-wrap: normal;
-            white-space: normal;
+            display: inline-block;
+            /* Ensures the element has a size */
+            animation:
+                HEADER_ANIMATION_COLOR 4s linear infinite
+        }
+
+        @keyframes HEADER_ANIMATION_COLOR {
+            0% {
+                background-color: #0f0;
+                letter-spacing: 0.0em;
+            }
+
+            25% {
+                background-color: #8f0;
+                letter-spacing: 0.05em;
+            }
+
+            50% {
+                background-color: #fff;
+                letter-spacing: 0.1em;
+            }
+
+            75% {
+                background-color: #8f0;
+                letter-spacing: 0.05em;
+            }
+
+            100% {
+                background-color: #0f0;
+                letter-spacing: 0.0em;
+            }
         }
     </style>
     <style>
@@ -56,12 +92,35 @@
 </head>
 
 <body>
-    <h1>Zephyros1938.org</h1>
-
-    <div name="PAGES" , class="INFO_DIV">
+    <h1 class="TITLE_HEADER">Zephyros1938.org</h1>
+    <br>
+    <div name="PAGES" class="INFO_DIV">
+        <h2>About</h2>
+        <div class="CONTENT_DIV">
+            <p>
+                This is a site for multiple coding projects created by Zephyros1938.<br><br>
+                Pages will be listed below.
+            </p>
+        </div>
         <h2>Pages</h2>
         <div name="INDEX_LINKS" class="CONTENT_DIV">
             <!-- INDEX_LINKS -->
         </div>
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const INDEX_LINKS = document.getElementsByClassName("CONTENT_DIV")
+            console.log(INDEX_LINKS)
+
+            for (x = 0; x < INDEX_LINKS.length; x += 1) {
+                if (INDEX_LINKS[x].parentNode) {
+                    const parentStyle = getComputedStyle(INDEX_LINKS[x].parentNode)
+                    const parentWidth = parentStyle.width
+                    const parentWidthParsed = parseInt(parentWidth.replace("em", ""), 10)
+                    INDEX_LINKS[x].style.width = `${parentWidthParsed * 0.9}px`
+                    console.log(parentWidth, parentWidthParsed)
+                }
+            }
+        })
+    </script>
 </body>

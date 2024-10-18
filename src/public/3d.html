@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        img.emoji {
+            width: 32px;
+            height: 32px;
+        }
+
+        img.sticker {
+            width: 160px;
+            height: 160px;
+        }
+
+        button.header {
+            border-radius: 0px;
+            background-color: #fff;
+        }
+
+        button.header:hover {
+            background-color: #ddd;
+        }
+
+        .active {
+            display: block;
+        }
+
+        .inactive {
+            display: none;
+        }
+    </style>
+    <style>
+        * {
+            font-family: monospace;
+        }
+
+        p,
+        pre {
+            font-size: 1em;
+        }
+
+        h1 {
+            font-size: 2em;
+        }
+
+        h2 {
+            font-size: 1.5em;
+        }
+
+        h3 {
+            font-size: 1.17em;
+        }
+
+        h4 {
+            font-size: 1em;
+        }
+
+        h5 {
+            font-size: 0.83em;
+        }
+
+        h6 {
+            font-size: .67em;
+        }
+
+        .object3d {}
+    </style>
+    <!-- META_TAGS -->
+</head>
+
+<body>
+    <h1 style="
+    display: inline-block;
+    position: absolute;
+    top: 50%;
+    left: 50%;" id="object1" z="0">test</h1>
+    <script>
+        /**
+ * Returns a number whose value is limited to the given range.
+ *
+ * Example: limit the output of this computation to between 0 and 255
+ * (x * 255).clamp(0, 255)
+ *
+ * @param {Number} min The lower boundary of the output range
+ * @param {Number} max The upper boundary of the output range
+ * @returns A number in the range [min, max]
+ * @type Number
+ */
+        Number.prototype.clamp = function (min, max) {
+            return Math.min(Math.max(this, min), max);
+        };
+    </script>
+    <script>
+        const headerElement = document.getElementById("object1")
+        const documentSize = [window.innerWidth, window.innerHeight]
+
+        document.addEventListener("mousemove", (e) => {
+            headerElement.style.top = `${(e.clientY * 100) / documentSize[1]}%`
+            headerElement.style.left = `${(e.clientX * 100) / documentSize[0]}%`
+        })
+
+        document.addEventListener("wheel", (e) => {
+            const zValue = parseInt(headerElement.getAttribute("z"), 10) - (e.deltaY / 132)
+            headerElement.setAttribute("z", zValue.clamp(-10,10))
+            headerElement.setAttribute("zPercentage",  (zValue.clamp(-10,10) + 11) / 100)
+            headerElement.style.fontSize = `${2 + ((zValue.clamp(-10,10) + 1) / 50)}em`
+        })
+    </script>
+</body>
