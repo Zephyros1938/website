@@ -38,11 +38,8 @@ const server = http.createServer(options, (req, res) => {
             if (url.includes('.html')) {
                 data = data.toString('utf8').replace("<!-- META_TAGS -->", utilities.generateMetaTags(url))
                 if(url.includes("/index.html")){
-                    console.log("a")
                     const replacer = utilities.generateUrlLinks()
-                    console.log(replacer)
                     data = data.replace("<!-- INDEX_LINKS -->", replacer)
-                    console.log(data)
                 }
                 res.writeHead(200);
                 res.end(data)

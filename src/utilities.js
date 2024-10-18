@@ -47,7 +47,7 @@ function generateUrlLinks(){
     dirList = dirList.filter(x => x.includes('.html'))
     dirJoined = ''
     dirList.forEach(x => {
-        dirJoined += `<a href="./${x}">${x}</a>\n`
+        dirJoined += `<a href="./${x}">${x}</a><br>`
     })
     return dirJoined
 }
