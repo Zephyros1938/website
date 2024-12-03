@@ -1,5 +1,5 @@
 {
-    "port": 80,
-    "address": "localhost",
-    "autoIP": true
+    "port": 443,
+    "address": "107.140.51.208",
+    "autoIP": false
 }

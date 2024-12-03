@@ -26,6 +26,7 @@ if (serverconfig.port === 443) {
 var connectedUsers = []
 const server = http.createServer(options, (req, res) => {
     const url = req.url == '/' ? "/index.html" : req.url == 'favicon.ico' ? "/static/favicon.ico" : req.url
+    const urlDepth = url.split("/").length;
     var p;
     try {
         p = fs.readFile(path.join(__dirname, 'public', url), (error, data) => {
@@ -36,9 +37,9 @@ const server = http.createServer(options, (req, res) => {
             }
 
             if (url.includes('.html')) {
-                data = data.toString('utf8').replace("<!-- META_TAGS -->", utilities.generateMetaTags(url))
+                data = data.toString('utf8').replace("<!-- META_TAGS -->", utilities.generateMetaTags(url, urlDepth))
                 if (url.includes("/index.html")) {
-                    const replacer = utilities.generateUrlLinks()
+                    const replacer = utilities.generateUrlLinks(urlDepth)
                     data = data.replace("<!-- INDEX_LINKS -->", replacer)
                 }
                 res.writeHead(200);
