@@ -43,7 +43,7 @@ const server = http.createServer(options, (req, res) => {
                     data = data.replace("<!-- INDEX_LINKS -->", replacer)
                 }
                 res.writeHead(200);
-                res.end(data)
+                res.end(data.replace(/[\u0400-\u04FF]/g, char => `&#${char.charCodeAt(0)};`))
             } else {
                 res.writeHead(200);
                 res.end(data)

@@ -22,7 +22,6 @@ function itemCounter(value = Array.prototype, index = String.prototype) {
 }
 
 function generateMetaTags(page, depth) {
-    console.log(depth)
     return `
       <title>${page}</title>
       <meta property="og:title" content="${page}">
